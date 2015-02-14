@@ -56,8 +56,15 @@ public class RogenChainSmoother implements ChainSmoother, Serializable{
 		
 		return smoothedPoints;
 	}
-	
 	private double[] smoothRogen(double[] x) {	    	
+
+	/**
+	 * P. Rogen, Evaluating protein structure descriptors and tuning Gauss integral
+	 * based descriptors, J. Phys.: Condens. Matter (2005) 17, S1523-S1538
+	 * @param x
+	 * @return
+	 */
+	
 		double[] y = new double[x.length];
         double a = 2.4;
         double b = 2.1;

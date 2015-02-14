@@ -9,6 +9,5 @@ import javax.vecmath.Point3d;
 public interface ChainSmoother {
 	
 	/*Takes in a list of 3d points and returns a list of smoothed 3d points*/
-	public Point3d [] getSmoothedPoints(Point3d [] points);
-
+	Point3d [] getSmoothedPoints(Point3d [] points);
 }

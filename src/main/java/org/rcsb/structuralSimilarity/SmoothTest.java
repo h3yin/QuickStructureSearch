@@ -36,7 +36,7 @@ public class SmoothTest {
 		String pdbFileDirectory = "src/test/resources/Data/ProteinSimilarity/";
 
 		SmoothTest aaa = new SmoothTest();
-		aaa.run(sequenceFileName, pdbFileDirectory);
+		aaa.run(sequenceFileName, args[0]);
 	}
 
 	private void run(String path, String filename) throws FileNotFoundException {
@@ -56,7 +56,7 @@ public class SmoothTest {
 				.filter(new GapFilter(0, 0)) // keep protein chains with gap size <= 3 and <= 5 gaps
 				.filter(new LengthFilter(50,1000)) // keep protein chains with at least 75 residues
 				//		.mapToPair(new ChainSmootherMapper(new RogenChainSmoother(2))) // apply smoothing here ..
-						.mapToPair(new ChainSmootherMapper(new SavitzkyGolayChainSmoother(3))) // apply smoothing here ..
+				.mapToPair(new ChainSmootherMapper(new SavitzkyGolayChainSmoother(3))) // apply smoothing here ..
 				.collect(); // return results to master node
 
 		writePointsToPdb(list, filename);
@@ -94,7 +94,7 @@ public class SmoothTest {
 					// create an amino acid group (residue) and add it to the chain
 					Group g = new AminoAcidImpl();
 					g.setPDBName("GLY"); // for now, all amino acids set to Glycine
-					g.setResidueNumber("A",  i, ' ');
+					g.setResidueNumber(tuple._1.substring(5,6),  i, ' ');
 					g.addAtom(atom);
 					
 					// add group to chain

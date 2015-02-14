@@ -2,10 +2,6 @@ package org.rcsb.structuralSimilarity;
 
 import javax.vecmath.Point3d;
 
-import org.apache.hadoop.io.ArrayWritable;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.spark.api.java.function.PairFunction;
 
 import scala.Tuple2;
@@ -19,6 +15,7 @@ import scala.Tuple2;
 public class ChainSmootherMapper implements PairFunction<Tuple2<String, Point3d[]>,String, Point3d[]> {
 	private static final long serialVersionUID = 1L;
 	private ChainSmoother smoother = null;
+
 	
 	public ChainSmootherMapper(ChainSmoother smoother) {
 		this.smoother = smoother;
@@ -30,7 +27,9 @@ public class ChainSmootherMapper implements PairFunction<Tuple2<String, Point3d[
 	@Override
 	public Tuple2<String, Point3d[]> call(Tuple2<String, Point3d[]> tuple) throws Exception {	
 	    Point3d[] smoothPoints = smoother.getSmoothedPoints(tuple._2);
+
 //		Point3d[] smoothPoints = new Point3d[0];
+
 		return new Tuple2<String,Point3d[]>(tuple._1, smoothPoints);
 	}
 }
