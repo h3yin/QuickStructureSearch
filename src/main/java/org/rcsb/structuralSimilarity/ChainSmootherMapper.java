@@ -18,18 +18,19 @@ import scala.Tuple2;
 */
 public class ChainSmootherMapper implements PairFunction<Tuple2<String, Point3d[]>,String, Point3d[]> {
 	private static final long serialVersionUID = 1L;
-//
-//	public ChainSmootherMapper(ChainSmoother smoother) {
-//		this.smoother = smoother;
-//	}
+	private ChainSmoother smoother = null;
+	
+	public ChainSmootherMapper(ChainSmoother smoother) {
+		this.smoother = smoother;
+	}
 
 	/**
 	 * Maps a <String, Point3d[]> pair by a <String, Point3d[]> pair with smoothed points.
 	 */
 	@Override
 	public Tuple2<String, Point3d[]> call(Tuple2<String, Point3d[]> tuple) throws Exception {	
-//	    Point3d[] smoothPoints = smoother.getSmoothedPoints(tuple._2);
-		Point3d[] smoothPoints = new Point3d[0];
+	    Point3d[] smoothPoints = smoother.getSmoothedPoints(tuple._2);
+//		Point3d[] smoothPoints = new Point3d[0];
 		return new Tuple2<String,Point3d[]>(tuple._1, smoothPoints);
 	}
 }

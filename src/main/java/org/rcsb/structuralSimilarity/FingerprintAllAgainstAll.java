@@ -12,6 +12,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.rcsb.fingerprints.EndToEndDistanceFingerprint;
+import org.rcsb.fingerprints.YinFingerprint;
 
 import scala.Tuple2;
 
@@ -53,8 +54,9 @@ public class FingerprintAllAgainstAll {
 				.mapToPair(new SeqToChainMapper()) // convert input to <pdbId.chainId, CA coordinate> pairs
 				.filter(new GapFilter(3, 5)) // keep protein chains with gap size <= 3 and <= 5 gaps
 				.filter(new LengthFilter(50,1000)) // keep protein chains with at least 50 residues
-		   //	.mapToPair(new ChainSmootherMapper(new RogenChainSmoother(2))); // add new chain smoother here ...
-				.mapToPair(new ChainToFeatureVectorMapper(new EndToEndDistanceFingerprint())) // calculate features
+				.mapToPair(new ChainSmootherMapper(new RogenChainSmoother(2))) // add new chain smoother here ...
+				.mapToPair(new ChainToFeatureVectorMapper(new YinFingerprint())) // calculate features
+			//	.mapToPair(new ChainToFeatureVectorMapper(new EndToEndDistanceFingerprint())) // calculate features
 	       //	.mapToPair(new ChainToFeatureVectorMapper(new DCT1DFingerprint())) // calculate features
 				.collect(); // return results to master node
 

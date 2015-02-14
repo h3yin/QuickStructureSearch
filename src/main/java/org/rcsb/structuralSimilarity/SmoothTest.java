@@ -32,8 +32,8 @@ public class SmoothTest {
 
 	public static void main(String[] args ) throws FileNotFoundException
 	{
-		String sequenceFileName = "/Users/peter/Data/PDB_CHAINS/protein_chains_40_20150114_141156.seq";
-		String pdbFileDirectory = "/Users/peter/Data/ProteinSimilarity/";
+		String sequenceFileName = "src/test/resources/protein_chains_40_20150114_141156.seq";
+		String pdbFileDirectory = "src/test/resources/Data/ProteinSimilarity/";
 
 		SmoothTest aaa = new SmoothTest();
 		aaa.run(sequenceFileName, pdbFileDirectory);
@@ -51,12 +51,12 @@ public class SmoothTest {
 		// Step 1. calculate <pdbId.chainId, feature vector> pairs
 		List<Tuple2<String,Point3d[]>> list  = sc
 				.sequenceFile(path, Text.class, ArrayWritable.class, NUM_THREADS)  // read protein chains
-				.sample(false, 0.001, 123456) // use only a random fraction, i.e., 40%
+				.sample(false, 0.01, 123456) // use only a random fraction, i.e., 40%
 				.mapToPair(new SeqToChainMapper()) // convert input to <pdbId.chainId, CA coordinate> pairs
-				.filter(new GapFilter(0, 5)) // keep protein chains with gap size <= 3 and <= 5 gaps
+				.filter(new GapFilter(0, 0)) // keep protein chains with gap size <= 3 and <= 5 gaps
 				.filter(new LengthFilter(50,1000)) // keep protein chains with at least 75 residues
-				//		.mapToPair(new ChainSmootherMapper(new RogenSmoother(2))); // apply smoothing here ..
-				//		.mapToPair(new ChainSmootherMapper(new SavitzkyGolay7PointSmoother(2))); // apply smoothing here ..
+				//		.mapToPair(new ChainSmootherMapper(new RogenChainSmoother(2))) // apply smoothing here ..
+						.mapToPair(new ChainSmootherMapper(new SavitzkyGolayChainSmoother(3))) // apply smoothing here ..
 				.collect(); // return results to master node
 
 		writePointsToPdb(list, filename);

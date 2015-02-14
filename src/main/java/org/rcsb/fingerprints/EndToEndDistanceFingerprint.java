@@ -36,7 +36,7 @@ public class EndToEndDistanceFingerprint implements GenericFingerprint, Serializ
     	return this.getClass().getSimpleName() + "_L" + this.length + "B" + this.binSize;
     }
 
-    /**
+    /*
      * Returns a fingerprint for the given chain. 
      * @param coords coordinates of a macromolecule fragment
      * @return fingerprint
