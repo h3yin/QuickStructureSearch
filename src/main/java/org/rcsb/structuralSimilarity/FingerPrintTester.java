@@ -17,6 +17,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.rcsb.fingerprints.DCT1DFingerprint;
 import org.rcsb.fingerprints.EndToEndDistanceFingerprint;
 import org.rcsb.fingerprints.TetrahedronFingerprint;
+import org.rcsb.fingerprints.YinFingerprint;
 
 import scala.Tuple2;
 
@@ -38,8 +39,9 @@ public class FingerPrintTester {
 			System.out.println("  sequenceFile: Hadoop sequence file with protein chain information");
 			System.out.println("  outputFile: results from calculation in .csv format. This file should have a .csv extension");
 		}
+		
 		String sequenceFileName = "src/test/resources/protein_chains_40_20150114_141156.seq";
-		String outputFileName = args[1];
+		String outputFileName = "src/test/resources/protein_chains_40_20150114_141156.csv";
 
 		if (args.length == 3) {
 			sequenceFileName = args[1]; 
@@ -90,7 +92,8 @@ public class FingerPrintTester {
 		     	.mapToPair(new ChainSmootherMapper(new RogenChainSmoother(2))) // add new chain smoother here ...
 //		        .mapToPair(new ChainSmootherMapper(new SavitzkyGolay7PointSmoother(2))) // add new chain smoother here ...
 //				.mapToPair(new ChainToFeatureVectorMapper(new TetrahedronFingerprint())) // calculate features
-				.mapToPair(new ChainToFeatureVectorMapper(new EndToEndDistanceFingerprint(9,2))) // calculate features
+				//.mapToPair(new ChainToFeatureVectorMapper(new EndToEndDistanceFingerprint(9,2))) // calculate features
+				.mapToPair(new ChainToFeatureVectorMapper(new YinFingerprint())) // calculate features
 //	       	    .mapToPair(new ChainToFeatureVectorMapper(new DCT1DFingerprint())) // calculate features
 //	       	    .mapToPair(new ChainToFeatureVectorMapper(new PointToPointDistanceFingerprint(200, 50, 10))) // calculate features
 				.cache();
